@@ -15,12 +15,14 @@ transmission_data <- list(
   por = transmission.por
 )
 
-plot_bacteria_accumulation(sim_idx = 10, transmission_data, occupational_output, params_df)
+sim_idx = c(1:nrow(occupational_output))[occupational_output$B_flock_status == "p"][1]
+plot_bacteria_accumulation(sim_idx, transmission_data, occupational_output, params_df)
 
 # Estimate avg. conc. on lips given conc. on hands
 source(here::here("occupational-module/biosecurity_module.R"))
 
 # Plot exposure ECDFs
+plot_ecdfs(occupational_output[occupational_output$B_flock_status == "p", ])
 plot_ecdfs(occupational_output)
 
 
