@@ -61,7 +61,7 @@ occupational_output$C_cm2.clearing <-
   occupational_output$C_cm2.clearing * foodborne_output$Amount_fec / broiler_area[params_df$clearing_day]
 
 # Hanging
-occupational_output$C_cm2.prod <-
+occupational_output$C_cm2.hanging <-
   foodborne_output$C_prod / broiler_area[params_df$clearing_day]
 
 # Eviseration

@@ -19,7 +19,7 @@ transmission.clearing <-
 
 transmission.hanging <-
   compute_final_C_hand(
-    occupational_output$C_cm2.prod,
+    occupational_output$C_cm2.hanging,
     occupational_output$broiler_worker.hanging,
     occupational_output$t_bird
   )
