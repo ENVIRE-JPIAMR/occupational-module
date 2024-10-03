@@ -27,7 +27,7 @@ compute_final_C_hand <- function(Cs_list, n, t) {
   return(final_Cw_list)
 }
 
-# Funtion to extract final conc. from matirx
+# Function to extract final conc. from matirx
 
 extract_elements <- function(A, k) {
 

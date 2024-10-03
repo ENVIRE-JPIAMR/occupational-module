@@ -3,7 +3,7 @@
 load_inputs_occupational <- function(input_manual = list()) {
   
   ## read input variables
-  df_read <- read_xlsx("occupational-module/data-input/inputs.xlsx")
+  df_read <- read_xlsx(here::here("occupational-module/data-input/inputs.xlsx"))
   
   ## parsing objects from input list
   input_objects = list(
