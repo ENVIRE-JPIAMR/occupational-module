@@ -54,11 +54,19 @@ occupational_output$C_cm2.thinning <-
 occupational_output$C_cm2.thinning <-
   occupational_output$C_cm2.thinning * foodborne_output$Amount_fec / broiler_area[params_df$thinning_day]
 
+occupational_output$C_cm2.thinning <- ifelse(occupational_output$B_flock_status == "p",
+                                             occupational_output$C_cm2.thinning,
+                                             0)
+
 # Clearing
 occupational_output$C_cm2.clearing <-
   farm_output[params_df$clearing_day, 1, ] / (farm_output[params_df$clearing_day, 4, ] + input_list_farm$farm_size * input_list_farm$litter_mass)
 occupational_output$C_cm2.clearing <-
   occupational_output$C_cm2.clearing * foodborne_output$Amount_fec / broiler_area[params_df$clearing_day]
+
+occupational_output$C_cm2.clearing <- ifelse(occupational_output$B_flock_status == "p",
+                                             occupational_output$C_cm2.clearing,
+                                             0)
 
 # Hanging
 occupational_output$C_cm2.hanging <-
