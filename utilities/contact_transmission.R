@@ -17,7 +17,7 @@ compute_final_C_hand <- function(Cs_list, n, t) {
     
     # Loop to calculate Cw values
     for (i in 2:n[j]) {
-      Cw[i] <- Cw[i-1] + t[j] * (Cs * params_df$hand_surface - Cw[i-1]) / 100 # t in percentage
+      Cw[i] <- Cw[i-1] + t[j] * (Cs * (1 - occupational_output$d[j]) * params_df$hand_surface - Cw[i-1]) / 100 # t in percentage
     }
     
     # Store the final Cw value in the list (adj. due to unequal row lengths)
