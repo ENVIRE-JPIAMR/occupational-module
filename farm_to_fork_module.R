@@ -15,6 +15,7 @@ occupational_output <-
                        "B_flock_status",
                        "init_prev",
                        "Prev_prod",
+                       "Prev_df",
                        "Prev_ev",
                        "Prev_proc")]
 names(occupational_output)[names(occupational_output) == "init_prev"] <-
@@ -67,15 +68,24 @@ occupational_output$C_cm2.clearing <-
 occupational_output$C_cm2.clearing <- ifelse(occupational_output$B_flock_status == "p",
                                              occupational_output$C_cm2.clearing,
                                              0)
-
-# Hanging
-occupational_output$C_cm2.hanging <-
+# Unloading
+occupational_output$C_cm2.unloading <-
   foodborne_output$C_prod / broiler_area[params_df$clearing_day]
 
-# Eviseration
-occupational_output$C_cm2.ev <-
+# Hanging
+occupational_output$C_cm2.hanging <- occupational_output$C_cm2.unloading #crate surface conc. is same as exterior conc. of broilers after transport
+  
+# Post-bleeding
+occupational_output$C_cm2.post_bleeding <- occupational_output$C_cm2.unloading #broiler ext. conc. remains unchanged
+  
+# Post-defeathering
+occupational_output$C_cm2.post_df <-
+  foodborne_output$C_df / broiler_area[params_df$clearing_day]
+
+# Post-eviseration
+occupational_output$C_cm2.post_ev <-
   foodborne_output$C_ev / broiler_area[params_df$clearing_day]
 
 # Portioning
-occupational_output$C_cm2.por <-
+occupational_output$C_cm2.portioning <-
   foodborne_output$C_proc / broiler_area[params_df$clearing_day]

@@ -3,6 +3,7 @@
 source(here::here("occupational-module/utilities/contact_transmission.R"))
 source(here::here("occupational-module/utilities/broiler_worker_ratio.R"))
 
+# Thinning
 transmission.thinning <-
   compute_final_C_hand(
     occupational_output$C_cm2.thinning,
@@ -10,6 +11,11 @@ transmission.thinning <-
     occupational_output$t_bird
   )
 
+## Extracting final concentrations 
+occupational_output$C_hand.thinning <-
+  extract_elements(transmission.thinning,
+                   occupational_output$broiler_worker.thinning) 
+# Clearing
 transmission.clearing <-
   compute_final_C_hand(
     occupational_output$C_cm2.clearing,
@@ -17,6 +23,25 @@ transmission.clearing <-
     occupational_output$t_bird
   )
 
+## Extracting final concentrations 
+occupational_output$C_hand.clearing <-
+  extract_elements(transmission.clearing,
+                   occupational_output$broiler_worker.clearing)
+
+# Unloading 
+transmission.unloading <-
+  compute_final_C_hand(
+    occupational_output$C_cm2.unloading, 
+    occupational_output$broiler_worker.unloading,
+    occupational_output$t_board
+  )
+
+## Extracting final concentrations 
+occupational_output$C_hand.unloading <-
+  extract_elements(transmission.unloading,
+                   occupational_output$broiler_worker.unloading)
+
+# Hanging
 transmission.hanging <-
   compute_final_C_hand(
     occupational_output$C_cm2.hanging,
@@ -24,37 +49,60 @@ transmission.hanging <-
     occupational_output$t_bird
   )
 
-transmission.ev <-
-  compute_final_C_hand(
-    occupational_output$C_cm2.ev,
-    occupational_output$broiler_worker.slaughter,
-    occupational_output$t_meat
-  )
-
-transmission.por <-
-  compute_final_C_hand(
-    occupational_output$C_cm2.por,
-    occupational_output$broiler_worker.slaughter,
-    occupational_output$t_meat
-  )
-
-occupational_output$C_hand.thinning <-
-  extract_elements(transmission.thinning,
-                   occupational_output$broiler_worker.thinning) 
-
-occupational_output$C_hand.clearing <-
-  extract_elements(transmission.clearing,
-                   occupational_output$broiler_worker.clearing)
-
+## Extracting final concentrations 
 occupational_output$C_hand.hanging <-
   extract_elements(transmission.hanging,
                    occupational_output$broiler_worker.hanging)
 
-occupational_output$C_hand.ev <-
-  extract_elements(transmission.ev,
-                   occupational_output$broiler_worker.slaughter)
+# Post-bleeding
+transmission.post_bleeding <-
+  compute_final_C_hand(
+    occupational_output$C_cm2.post_bleeding, 
+    occupational_output$broiler_worker.post_bleeding,
+    occupational_output$t_bird
+  )
 
-occupational_output$C_hand.por <-
-  extract_elements(transmission.por,
-                   occupational_output$broiler_worker.slaughter)
+## Extracting final concentrations 
+occupational_output$C_hand.post_bleeding <-
+  extract_elements(transmission.post_bleeding,
+                   occupational_output$broiler_worker.post_bleeding)
+
+# Post-defeathering
+transmission.post_df <-
+  compute_final_C_hand(
+    occupational_output$C_cm2.post_df,
+    occupational_output$broiler_worker.post_df,
+    occupational_output$t_meat
+  )
+
+## Extracting final concentrations 
+occupational_output$C_hand.post_df <-
+  extract_elements(transmission.post_df,
+                   occupational_output$broiler_worker.post_df)
+
+# Post-evisceration
+transmission.post_ev <-
+  compute_final_C_hand(
+    occupational_output$C_cm2.post_ev,
+    occupational_output$broiler_worker.post_ev,
+    occupational_output$t_meat
+  )
+
+## Extracting final concentrations 
+occupational_output$C_hand.post_ev <-
+  extract_elements(transmission.post_ev,
+                   occupational_output$broiler_worker.post_ev)
+
+# Portioning
+transmission.portioning <-
+  compute_final_C_hand(
+    occupational_output$C_cm2.portioning,
+    occupational_output$broiler_worker.portioning,
+    occupational_output$t_meat
+  )
+
+## Extracting final concentrations 
+occupational_output$C_hand.portioning <-
+  extract_elements(transmission.portioning,
+                   occupational_output$broiler_worker.portioning)
 

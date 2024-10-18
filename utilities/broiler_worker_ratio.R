@@ -14,10 +14,26 @@ occupational_output$broiler_worker.thinning <-
 occupational_output$broiler_worker.clearing <-
   round(n_broiler / occupational_output$n_farm)
 
+# Unloading
+occupational_output$broiler_worker.unloading <-
+  round(n_broiler / (occupational_output$n_unloading * occupational_output$crate_size))
+
 # Hanging
 occupational_output$broiler_worker.hanging <-
   round(n_broiler / occupational_output$n_hanging)
 
-# Slaughter (evisceration + portioning)
-occupational_output$broiler_worker.slaughter <-
-  round(n_broiler / occupational_output$n_slaughter)
+# Post-bleeding
+occupational_output$broiler_worker.post_bleeding <-
+  round(n_broiler * occupational_output$eff.post_bleeding / occupational_output$n_post_bleeding)
+
+# Post-defeathering
+occupational_output$broiler_worker.post_df <-
+  round(n_broiler * occupational_output$eff.post_df / occupational_output$n_post_df)
+
+# Post-evisceration
+occupational_output$broiler_worker.post_ev <-
+  round(n_broiler / occupational_output$n_post_ev)
+
+# Portioning
+occupational_output$broiler_worker.portioning <-
+  round(n_broiler / occupational_output$n_portioning)

@@ -10,9 +10,12 @@ source(here::here("occupational-module/utilities/visualization.R"))
 transmission_data <- list(
   thinning = transmission.thinning,
   clearing = transmission.clearing,
+  unloading = transmission.unloading,
   hanging = transmission.hanging,
-  ev = transmission.ev,
-  por = transmission.por
+  post_bleeding = transmission.post_bleeding,
+  post_df = transmission.post_ev,
+  post_ev = transmission.post_ev,
+  portioning = transmission.portioning
 )
 
 sim_idx = c(1:nrow(occupational_output))[occupational_output$B_flock_status == "p"][1]

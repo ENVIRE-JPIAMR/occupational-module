@@ -2,11 +2,14 @@
 
 # Plot hand conc. over number of contacts, for different stages
 plot_bacteria_accumulation <- function(sim_idx, transmission_data, occupational_output, params_df) {
-  stages <- c("thinning", "clearing", "hanging", "ev", "por")
+  stages <- c("thinning", "clearing", "unloading", "hanging", "post_bleeding", "post_df", "post_ev", "portioning")
   titles <- c("Bacteria accumulation: thinning", 
               "Bacteria accumulation: clearing", 
+              "Bacteria accumulation: unloading", 
               "Bacteria accumulation: hanging", 
-              "Bacteria accumulation: evisceration", 
+              "Bacteria accumulation: post bleeding", 
+              "Bacteria accumulation: post defeathering", 
+              "Bacteria accumulation: post evisceration", 
               "Bacteria accumulation: portioning")
   
   for (i in seq_along(stages)) {
@@ -35,11 +38,14 @@ plot_ecdfs <- function(occupational_output) {
   data_long <- data.frame(value = c(
     log10(occupational_output$C_lips.thinning),
     log10(occupational_output$C_lips.clearing),
+    log10(occupational_output$C_lips.unloading),
     log10(occupational_output$C_lips.hanging),
-    log10(occupational_output$C_lips.ev),
-    log10(occupational_output$C_lips.por)
+    log10(occupational_output$C_lips.post_bleeding),
+    log10(occupational_output$C_lips.post_df),
+    log10(occupational_output$C_lips.post_ev),
+    log10(occupational_output$C_lips.portioning)
   ),
-  pathway = rep(c("thinning", "clearing", "hanging", "evisceration", "portioning"), each = nrow(occupational_output)))
+  pathway = rep(c("thinning", "clearing", "unloading", "hanging", "post_bleeding", "post_df", "post_ev", "portioning"), each = nrow(occupational_output)))
   
   # Plot the ECDFs
   ggplot(data_long, aes(x = value, color = pathway)) +
@@ -53,8 +59,11 @@ plot_ecdfs <- function(occupational_output) {
     scale_color_manual(values = c(
       "thinning" = "blue",
       "clearing" = "green",
+      "unloading" = "yellow",
       "hanging" = "red",
-      "evisceration" = "violet",
+      "post_bleeding" = "purple", 
+      "post_df" = "pink", 
+      "post_ev" = "brown",
       "portioning" = "orange"
     )) +
     theme_minimal()

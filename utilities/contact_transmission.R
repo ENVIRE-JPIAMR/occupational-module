@@ -1,4 +1,9 @@
 ## Function to estimate cummulative conc. after repeated touching
+## Arguments: Cs_list := List of surface concentrations corr. to diff. simulations
+##            n       := List of contacts with surface corr. to diff. simulations
+##            t       := List of simulated transfer rates (in percentage)
+## Generates a matrix (length(Cs_list) x max(n))
+## Extra columns at the end of the rows with n < max(n) are filled with 0s
 
 compute_final_C_hand <- function(Cs_list, n, t) {
 
@@ -27,7 +32,10 @@ compute_final_C_hand <- function(Cs_list, n, t) {
   return(final_Cw_list)
 }
 
-# Function to extract final conc. from matirx
+## Function to extract final conc. from output matirx of function: compute_final_C_hand
+## Arguments: A := The output matrix
+##            k := Column indices to be extracted (argument n in compute_final_C_hand)
+## Generates the final hand conc. corr. to diff. simulations
 
 extract_elements <- function(A, k) {
 
@@ -38,5 +46,5 @@ extract_elements <- function(A, k) {
     elements_list[[i]] <- A[i, k[i]]
   }
   
-  return(elements_list)
+  return(unlist(elements_list))
 }
