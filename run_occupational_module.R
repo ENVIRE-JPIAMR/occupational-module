@@ -28,5 +28,8 @@ source(here::here("occupational-module/biosecurity_module.R"))
 plot_ecdfs(occupational_output[occupational_output$B_flock_status == "p", ])
 plot_ecdfs(occupational_output)
 
-
-
+# Plot variables
+plot_variable(occupational_output, plot_all = FALSE, flock = TRUE, variable = "lips")
+plot_variable(occupational_output, plot_all = FALSE, flock = TRUE, variable = "hand")
+plot_variable(occupational_output, plot_all = FALSE, flock = TRUE, variable = "surface")
+plot_contacts(occupational_output, plot_all = FALSE, flock = TRUE)
