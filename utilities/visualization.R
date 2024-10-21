@@ -16,7 +16,7 @@ plot_bacteria_accumulation <- function(sim_idx, transmission_data, occupational_
     stage <- stages[i]
     title <- titles[i]
     transmission_stage <- transmission_data[[stage]][sim_idx, ]
-    surface_conc <- occupational_output[[paste0("C_cm2.", stage)]][sim_idx] * params_df$hand_surface
+    surface_conc <- occupational_output[[paste0("C_cm2.", stage)]][sim_idx]
     
     plot(
       transmission_stage[transmission_stage > 0],

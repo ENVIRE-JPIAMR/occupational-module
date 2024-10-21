@@ -3,7 +3,7 @@
 ## Funtion for computing bio-security constant for a given prob. of wearing mask
 get_bio_seq_constant <- function(p_mask){
   
-  constant <- p_mask * params_df$p_glove * params_df$p_wash *
+  constant <- (p_mask * params_df$p_glove * params_df$p_wash *
     params_df$q_mask * params_df$q_glove * params_df$q_wash +
     (1 - p_mask) * (1 - params_df$p_glove) * (1 - params_df$p_wash) +
     p_mask * params_df$p_glove * (1 - params_df$p_wash) *
@@ -17,19 +17,22 @@ get_bio_seq_constant <- function(p_mask){
     (1 - p_mask) * params_df$p_glove * (1 - params_df$p_wash) *
     params_df$q_glove +
     p_mask * (1 - params_df$p_glove) * (1 - params_df$p_wash) *
-    params_df$q_mask * 
+    params_df$q_mask) * 
     params_df$q_lips
   
   return(constant)
   
 }
 
-## Bio-security constant using male female ratio among workers
+## Bio-security constant adjusted wtih male female ratio among workers 
 bio_seq_constant <-
   get_bio_seq_constant(params_df$p_mask_male) * params_df$p_male +
   get_bio_seq_constant(params_df$p_mask_female) * (1 - params_df$p_male)
 
-## Compute estimated conc. on worker lips given accidental touch
+## Bio-security constant adjusted with finger tip area
+bio_seq_constant <- bio_seq_constant * occupational_output$finger_surface
+
+## Compute estimated conc. (CFU/finger contact area) on worker lips given accidental touch
 occupational_output$C_lips.thinning <-
   bio_seq_constant * occupational_output$C_hand.thinning
 occupational_output$C_lips.clearing <-
