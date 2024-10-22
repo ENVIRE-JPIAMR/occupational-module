@@ -182,13 +182,12 @@ plot_variable <- function(data, plot_all = TRUE, flock = TRUE, variable) {
   return(gg)
 }
 
-# Plot boilers per worker contacts over different stages
+# Boxplot boilers per worker contacts over different stages
 # Arguments: data     := output df of the occupational module
 #            plot_all := if TRUE, plots individual simulations
 #                        else, plots mean, median and empirical CIs
 #            flock    := if True, distinguishes positive and negative plots
-#TODO: box plots
-plot_contacts <- function(data, plot_all = TRUE, flock = TRUE) {
+plot_box <- function(data) {
   
   myprefix <- "broiler_worker."
   mytitle <- "Broiler processed per worker over production stages"
@@ -201,82 +200,13 @@ plot_contacts <- function(data, plot_all = TRUE, flock = TRUE) {
     pivot_longer(cols = starts_with(myprefix), names_to = "variable", values_to = "value") %>%
     mutate(step = factor(sub(myprefix, "", variable), levels = steps_order))
   
-  if (flock) {
-    data_long <- data_long %>%
-      mutate(flock_status = ifelse(B_flock_status == "p", "positive", "negative"),
-             color = ifelse(B_flock_status == "p", "red", "blue"))
-  } else {
-    data_long <- data_long %>%
-      mutate(flock_status = "all",
-             color = "black")
-  }
-  
-  if (plot_all) {
-    gg <- ggplot(data = data_long, aes(x = step, y = value, color = color, group = Runs)) +
-      labs(title = mytitle,
-           subtitle = paste0("flocks size: ", n_broiler, " with ", length(data$Runs), " MC runs"),
-           x = "Stages",
-           y = mylabel) +
-      theme_minimal() +
-      geom_line() +
-      geom_point() +
-      scale_color_manual(values = c("red" = "red", "blue" = "blue"), labels = c("red" = paste0("positive (", round(mean(foodborne_output$prev), 2)*100, "%)"), "blue" = paste0("negative (", (1-round(mean(foodborne_output$prev), 2))*100, "%)")), name = "Flock Status")
-    
-  } else {
-    # Calculate summary statistics for plotting
-    if (flock) {
-      summary_data <- data_long %>%
-        group_by(step, color, flock_status) %>%
-        summarize(
-          mean_value = mean(value, na.rm = TRUE),
-          median_value = median(value, na.rm = TRUE),
-          lower_ci = quantile(value, 0.025, na.rm = TRUE),
-          upper_ci = quantile(value, 0.975, na.rm = TRUE),
-          .groups = 'drop'
-        )
-    } else {
-      summary_data <- data_long %>%
-        group_by(step) %>%
-        summarize(
-          mean_value = mean(value, na.rm = TRUE),
-          median_value = median(value, na.rm = TRUE),
-          lower_ci = quantile(value, 0.025, na.rm = TRUE),
-          upper_ci = quantile(value, 0.975, na.rm = TRUE),
-          .groups = 'drop'
-        ) %>%
-        mutate(color = "black", flock_status = "all")
-    }
-    
-    # Create the plot
-    gg <- ggplot(data = summary_data, aes(x = step, group = color, color = color)) +
-      geom_line(aes(y = mean_value, linetype = "Mean"), size = 1) +
-      geom_line(aes(y = median_value, linetype = "Median"), size = 1) +
-      geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci, fill = color), alpha = 0.3) +  # Confidence bands
-      labs(title = mytitle,
-           subtitle = paste0("flocks size: ", n_broiler, " with ", length(data$Runs), " MC runs"),
-           x = "Stages",
-           y = mylabel) +
-      scale_linetype_manual(values = c("Mean" = "solid", "Median" = "dotted"), name = "Statistic")
-    
-    if (flock) {
-      gg <- gg + 
-        scale_color_manual(values = c("red" = "red", "blue" = "blue"), name = "Flock Status",
-                           labels = c("red" = paste0("positive (", round(mean(foodborne_output$prev), 2)*100, "%)"), "blue" = paste0("negative (", (1-round(mean(foodborne_output$prev), 2))*100, "%)"))) +
-        scale_fill_manual(values = c("red" = "red", "blue" = "blue"), guide = "none")
-    } else {
-      gg <- gg + 
-        scale_color_manual(values = c("black" = "black"), name = "Flock Status",
-                           labels = c("black" = "all")) +
-        scale_fill_manual(values = c("black" = "black"), guide = "none")
-    }
-    
-    gg <- gg + theme_minimal() +
-      theme(legend.title = element_text(size = 12),  # Set legend title
-            legend.text = element_text(size = 12)) +
-      guides(linetype = guide_legend(title = "Statistic"),
-             color = guide_legend(override.aes = list(linetype = "solid")))  # Ensure color legend shows solid line
-  }
+  gg <- ggplot(data = data_long, aes(x = step, y = value)) +
+    labs(title = mytitle,
+         subtitle = paste0("flocks size: ", n_broiler, " with ", length(data$Runs), " MC runs"),
+         x = "Stages",
+         y = mylabel) +
+    theme_minimal() +
+    geom_boxplot() 
   
   return(gg)
 }
-
