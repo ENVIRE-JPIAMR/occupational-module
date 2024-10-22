@@ -25,11 +25,33 @@ plot_bacteria_accumulation(sim_idx, transmission_data, occupational_output, para
 source(here::here("occupational-module/biosecurity_module.R"))
 
 # Plot exposure ECDFs
-plot_ecdfs(occupational_output[occupational_output$B_flock_status == "p", ])
+# plot_ecdfs(occupational_output[occupational_output$B_flock_status == "p", ])
 plot_ecdfs(occupational_output)
+
+# Estimate risk
+# source("occupational-module/risk_module.R")
+# Calculate the average risks for each stage
+# avg_risk_thinning <- format(mean(occupational_output$prob_carrier.thinning), digits = 2, scientific = TRUE)
+# avg_risk_clearing <- format(mean(occupational_output$prob_carrier.clearing), digits = 2, scientific = TRUE)
+# avg_risk_unloading <- format(mean(occupational_output$prob_carrier.unloading), digits = 2, scientific = TRUE)
+# avg_risk_hanging <- format(mean(occupational_output$prob_carrier.hanging), digits = 2, scientific = TRUE)
+# avg_risk_post_bleeding <- format(mean(occupational_output$prob_carrier.post_bleeding), digits = 2, scientific = TRUE)
+# avg_risk_post_df <- format(mean(occupational_output$prob_carrier.post_df), digits = 2, scientific = TRUE)
+# avg_risk_post_ev <- format(mean(occupational_output$prob_carrier.post_ev), digits = 2, scientific = TRUE)
+# avg_risk_portioning <- format(mean(occupational_output$prob_carrier.portioning), digits = 2, scientific = TRUE)
+
+# Create a data frame for tabular output
+# risk_table <- data.frame(
+#   Stage = c("Thinning", "Clearing", "Unloading", "Hanging", "Post Bleeding", "Post Defeathering", "Post Evisceration", "Portioning"),
+#   Average_Risk = c(avg_risk_thinning, avg_risk_clearing, avg_risk_unloading, avg_risk_hanging, avg_risk_post_bleeding, avg_risk_post_df, avg_risk_post_ev, avg_risk_portioning)
+# )
+
+# Print the table
+# print(risk_table)
 
 # Plot variables
 plot_variable(occupational_output, plot_all = FALSE, flock = TRUE, variable = "lips")
 plot_variable(occupational_output, plot_all = FALSE, flock = TRUE, variable = "hand")
 plot_variable(occupational_output, plot_all = FALSE, flock = TRUE, variable = "surface")
 plot_box(occupational_output)
+
