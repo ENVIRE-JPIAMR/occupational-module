@@ -22,6 +22,9 @@ sim_idx = c(1:nrow(occupational_output))[occupational_output$B_flock_status == "
 plot_bacteria_accumulation(sim_idx, transmission_data, occupational_output, params_df)
 
 # Estimate avg. conc. on lips given conc. on hands
+mask = "all" # "all" for male(masked) and female(non masked). Otherwise use "TRUE"/"FALSE"
+wash = "TRUE" # or manual p_wash values
+glove = "TRUE" # or manual p_glove values
 source(here::here("occupational-module/biosecurity_module.R"))
 
 # Plot exposure ECDFs
