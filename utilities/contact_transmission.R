@@ -14,15 +14,21 @@ compute_final_C_hand <- function(Cs_list, n, t) {
   
   # Loop through each Cs value
   for (j in seq_along(Cs_list)) {
-    Cs <- Cs_list[j]
-    
-    # Initialize the vector to store Cw values for the current Cs
-    Cw <- numeric(n[j])
-    Cw[1] <- Cw0
-    
-    # Loop to calculate Cw values
-    for (i in 2:n[j]) {
-      Cw[i] <- Cw[i-1] + t[j] * (Cs * (1 - occupational_output$d[j]) - Cw[i-1]) / 100 # t in percentage
+    if(n[j] == 0 || Cs_list[j] == 0){
+      Cw <- numeric(max(n))
+    }else if(n[j] == 1){
+      Cw <- t[j] * Cs_list[j] * (1 - occupational_output$d[j]) / 100
+    }else{
+      Cs <- Cs_list[j]
+      
+      # Initialize the vector to store Cw values for the current Cs
+      Cw <- numeric(n[j])
+      Cw[1] <- Cw0
+      
+      # Loop to calculate Cw values
+      for (i in 2:n[j]) {
+        Cw[i] <- Cw[i-1] + t[j] * (Cs * (1 - occupational_output$d[j]) - Cw[i-1]) / 100 # t in percentage
+      }
     }
     
     # Store the final Cw value in the list (adj. due to unequal row lengths)
@@ -39,6 +45,8 @@ compute_final_C_hand <- function(Cs_list, n, t) {
 
 extract_elements <- function(A, k) {
 
+  k[k == 0] <- 1 # replace zero indices by 1
+  
   elements_list <- vector("list", length(k))
   
   # Loop through each row and extract the element at the specified column index
