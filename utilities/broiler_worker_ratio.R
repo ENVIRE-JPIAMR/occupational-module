@@ -8,11 +8,11 @@ n_broiler <-
 
 # Thinning
 occupational_output$broiler_worker.thinning <-
-  round(n_broiler * occupational_output$Prev_farm * input_list_farm$thinning_percentage / occupational_output$n_farm)
+  round(n_broiler * occupational_output$Prev_thinning * input_list_farm$thinning_percentage / occupational_output$n_farm)
 
 # Clearing
 occupational_output$broiler_worker.clearing <-
-  round(n_broiler * occupational_output$Prev_farm / occupational_output$n_farm)
+  round(n_broiler * occupational_output$Prev_clearing / occupational_output$n_farm)
 
 # Unloading
 occupational_output$broiler_worker.unloading <-

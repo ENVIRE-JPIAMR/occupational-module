@@ -19,7 +19,7 @@ occupational_output <-
                        "Prev_ev",
                        "Prev_proc")]
 names(occupational_output)[names(occupational_output) == "init_prev"] <-
-  "Prev_farm"
+  "Prev_clearing"
 
 rm(list = setdiff(
   ls(),
@@ -41,6 +41,12 @@ input_occ <-
   read_excel(here("occupational-module/data-input/estimated_variables.xlsx"))
 occupational_output <-
   estimate_variables(occupational_output, input_occ, N = nrow(occupational_output))
+
+# Extracting the flock prevalence on thinning day
+occupational_output$Prev_thinning <- farm_output[params_df$thinning_day, 2, ]
+occupational_output$Prev_thinning <- ifelse(occupational_output$B_flock_status == "p",
+                                            occupational_output$Prev_thinning,
+                                            0)
 
 #######################################################
 ## Estimate concentrations (CFU/cm2) and prevalences ##

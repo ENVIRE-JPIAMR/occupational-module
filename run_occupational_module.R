@@ -2,7 +2,7 @@
 source(here::here("occupational-module/farm_to_fork_module.R"))
 
 # Estimate bacteria tansmission from surface to worker hands
-source(here::here("occupational-module/transmission_module.R"))
+source(here::here("occupational-module/contact_module.R"))
 
 # Plot transmission
 source(here::here("occupational-module/utilities/visualization.R"))
@@ -25,7 +25,7 @@ plot_bacteria_accumulation(sim_idx, transmission_data, occupational_output, para
 mask = "all" # "all" for male(masked) and female(non masked). Otherwise use "TRUE"/"FALSE"
 wash = "TRUE" # or manual p_wash values
 glove = "TRUE" # or manual p_glove values
-source(here::here("occupational-module/biosecurity_module.R"))
+source(here::here("occupational-module/hygiene_module.R"))
 
 # Plot exposure ECDFs
 # plot_ecdfs(occupational_output[occupational_output$B_flock_status == "p", ])
