@@ -6,13 +6,13 @@
 
 # Initialization
 source(here::here("occupational-module/farm_to_fork_module.R"))
-source(here::here("occupational-module/transmission_module.R"))
+source(here::here("occupational-module/contact_module.R"))
 
 # Effect of masks
 mask = "TRUE"
 wash = 0
 glove = 0
-source(here::here("occupational-module/biosecurity_module.R"))
+source(here::here("occupational-module/hygiene_module.R"))
 
 C_lips.thinning.mask <- occupational_output$C_lips.thinning
 C_lips.clearing.mask <- occupational_output$C_lips.clearing
@@ -27,7 +27,7 @@ C_lips.portioning.mask <- occupational_output$C_lips.portioning
 mask = "FALSE"
 wash = "TRUE"
 glove = 0
-source(here::here("occupational-module/biosecurity_module.R"))
+source(here::here("occupational-module/hygiene_module.R"))
 
 C_lips.thinning.wash <- occupational_output$C_lips.thinning
 C_lips.clearing.wash <- occupational_output$C_lips.clearing
@@ -42,7 +42,7 @@ C_lips.portioning.wash <- occupational_output$C_lips.portioning
 mask = "FALSE"
 wash = 0
 glove = "TRUE"
-source(here::here("occupational-module/biosecurity_module.R"))
+source(here::here("occupational-module/hygiene_module.R"))
 
 C_lips.thinning.glove <- occupational_output$C_lips.thinning
 C_lips.clearing.glove <- occupational_output$C_lips.clearing
@@ -57,7 +57,7 @@ C_lips.portioning.glove <- occupational_output$C_lips.portioning
 mask = "FALSE"
 wash = 0
 glove = 0
-source(here::here("occupational-module/biosecurity_module.R"))
+source(here::here("occupational-module/hygiene_module.R"))
 
 C_lips.thinning.baseline <- occupational_output$C_lips.thinning
 C_lips.clearing.baseline <- occupational_output$C_lips.clearing
@@ -72,7 +72,7 @@ C_lips.portioning.baseline <- occupational_output$C_lips.portioning
 mask = "TRUE"
 wash = "TRUE"
 glove = "TRUE"
-source(here::here("occupational-module/biosecurity_module.R"))
+source(here::here("occupational-module/hygiene_module.R"))
 
 C_lips.thinning.all <- occupational_output$C_lips.thinning
 C_lips.clearing.all <- occupational_output$C_lips.clearing
@@ -109,31 +109,31 @@ data <- data.frame(
   post_df.glove = log10(C_lips.post_df.glove),
   post_ev.glove = log10(C_lips.post_ev.glove),
   portioning.glove = log10(C_lips.portioning.glove),
-  thinning.baseline = log10(C_lips.thinning.baseline),
-  clearing.baseline = log10(C_lips.clearing.baseline),
-  unloading.baseline = log10(C_lips.unloading.baseline),
-  hanging.baseline = log10(C_lips.hanging.baseline),
-  post_bleeding.baseline = log10(C_lips.post_bleeding.baseline),
-  post_df.baseline = log10(C_lips.post_df.baseline),
-  post_ev.baseline = log10(C_lips.post_ev.baseline),
-  portioning.baseline = log10(C_lips.portioning.baseline)
+  thinning.none = log10(C_lips.thinning.baseline),
+  clearing.none = log10(C_lips.clearing.baseline),
+  unloading.none = log10(C_lips.unloading.baseline),
+  hanging.none = log10(C_lips.hanging.baseline),
+  post_bleeding.none = log10(C_lips.post_bleeding.baseline),
+  post_df.none = log10(C_lips.post_df.baseline),
+  post_ev.none = log10(C_lips.post_ev.baseline),
+  portioning.none = log10(C_lips.portioning.baseline)
 )
 
 # Reshape the data to long format
 data_long <- data %>%
   pivot_longer(cols = everything(), names_to = c("step", "intervention"), names_sep = "\\.") %>%
   mutate(step = factor(step, levels = c("thinning", "clearing", "unloading", "hanging", "post_bleeding", "post_df", "post_ev", "portioning")),
-         intervention = factor(intervention, levels = c("mask", "wash", "glove", "baseline")))
+         intervention = factor(intervention, levels = c("mask", "wash", "glove", "none")))
 
 # Create the boxplots
 ggplot(data_long, aes(x = step, y = value, fill = intervention)) +
   geom_boxplot(position = position_dodge(0.8)) +
-  labs(title = "Exposure relative to biosecurity practices over different steps",
+  labs(title = "Exposure relative to hygiene measures over different steps",
        # subtitle = "Females (no mask) and Males (with masks)",
        x = "Steps",
        y = "log10 CFU") +
   theme_minimal() +
-  scale_fill_manual(values = c("mask" = "blue", "wash" = "pink", "glove" = "green", "baseline" = "red"))
+  scale_fill_manual(values = c("mask" = "blue", "wash" = "pink", "glove" = "green", "none" = "red"))
 
 # Plot selected
 data_select <- data.frame(
@@ -145,29 +145,29 @@ data_select <- data.frame(
   post_df.all = log10(C_lips.post_df.all),
   post_ev.all = log10(C_lips.post_ev.all),
   portioning.all = log10(C_lips.portioning.all),
-  thinning.baseline = log10(C_lips.thinning.baseline),
-  clearing.baseline = log10(C_lips.clearing.baseline),
-  unloading.baseline = log10(C_lips.unloading.baseline),
-  hanging.baseline = log10(C_lips.hanging.baseline),
-  post_bleeding.baseline = log10(C_lips.post_bleeding.baseline),
-  post_df.baseline = log10(C_lips.post_df.baseline),
-  post_ev.baseline = log10(C_lips.post_ev.baseline),
-  portioning.baseline = log10(C_lips.portioning.baseline)
+  thinning.none = log10(C_lips.thinning.baseline),
+  clearing.none = log10(C_lips.clearing.baseline),
+  unloading.none = log10(C_lips.unloading.baseline),
+  hanging.none = log10(C_lips.hanging.baseline),
+  post_bleeding.none = log10(C_lips.post_bleeding.baseline),
+  post_df.none = log10(C_lips.post_df.baseline),
+  post_ev.none = log10(C_lips.post_ev.baseline),
+  portioning.none = log10(C_lips.portioning.baseline)
 )
 
 # Reshape the data to long format
 data_long <- data_select %>%
   pivot_longer(cols = everything(), names_to = c("step", "intervention"), names_sep = "\\.") %>%
   mutate(step = factor(step, levels = c("thinning", "clearing", "unloading", "hanging", "post_bleeding", "post_df", "post_ev", "portioning")),
-         intervention = factor(intervention, levels = c("all", "baseline")))
+         intervention = factor(intervention, levels = c("all", "none")))
 
 # Create the boxplots
 ggplot(data_long, aes(x = step, y = value, fill = intervention)) +
   geom_boxplot(position = position_dodge(0.8)) +
-  labs(title = "Exposure relative to biosecurity practices over different steps",
+  labs(title = "Exposure relative to hygiene measures over different steps",
        x = "Steps",
        y = "log10 CFU") +
   theme_minimal() +
-  scale_fill_manual(values = c("all" = "green", "baseline" = "red"))
+  scale_fill_manual(values = c("all" = "green", "none" = "red"))
 
 
