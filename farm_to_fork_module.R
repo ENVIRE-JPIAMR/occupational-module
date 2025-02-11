@@ -24,6 +24,7 @@ names(occupational_output)[names(occupational_output) == "init_prev"] <-
 rm(list = setdiff(
   ls(),
   c(
+    "data",
     "farm_output",
     "foodborne_output",
     "input_list_farm",
