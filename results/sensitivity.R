@@ -69,4 +69,4 @@ make_tornade_plot <- function(output_idx){
 
 }
 
-make_tornade_plot(12)
+make_tornade_plot(9)
