@@ -85,6 +85,14 @@ C_lips.portioning.all <- occupational_output$C_lips.portioning
 
 # Plot separately
 data <- data.frame(
+  thinning.none = log10(C_lips.thinning.baseline),
+  clearing.none = log10(C_lips.clearing.baseline),
+  unloading.none = log10(C_lips.unloading.baseline),
+  hanging.none = log10(C_lips.hanging.baseline),
+  post_bleeding.none = log10(C_lips.post_bleeding.baseline),
+  post_df.none = log10(C_lips.post_df.baseline),
+  post_ev.none = log10(C_lips.post_ev.baseline),
+  portioning.none = log10(C_lips.portioning.baseline),
   thinning.mask = log10(C_lips.thinning.mask),
   clearing.mask = log10(C_lips.clearing.mask),
   unloading.mask = log10(C_lips.unloading.mask),
@@ -109,31 +117,32 @@ data <- data.frame(
   post_df.glove = log10(C_lips.post_df.glove),
   post_ev.glove = log10(C_lips.post_ev.glove),
   portioning.glove = log10(C_lips.portioning.glove),
-  thinning.none = log10(C_lips.thinning.baseline),
-  clearing.none = log10(C_lips.clearing.baseline),
-  unloading.none = log10(C_lips.unloading.baseline),
-  hanging.none = log10(C_lips.hanging.baseline),
-  post_bleeding.none = log10(C_lips.post_bleeding.baseline),
-  post_df.none = log10(C_lips.post_df.baseline),
-  post_ev.none = log10(C_lips.post_ev.baseline),
-  portioning.none = log10(C_lips.portioning.baseline)
+  thinning.all = log10(C_lips.thinning.all),
+  clearing.all = log10(C_lips.clearing.all),
+  unloading.all = log10(C_lips.unloading.all),
+  hanging.all = log10(C_lips.hanging.all),
+  post_bleeding.all = log10(C_lips.post_bleeding.all),
+  post_df.all = log10(C_lips.post_df.all),
+  post_ev.all = log10(C_lips.post_ev.all),
+  portioning.all = log10(C_lips.portioning.all)
 )
 
 # Reshape the data to long format
 data_long <- data %>%
   pivot_longer(cols = everything(), names_to = c("step", "intervention"), names_sep = "\\.") %>%
   mutate(step = factor(step, levels = c("thinning", "clearing", "unloading", "hanging", "post_bleeding", "post_df", "post_ev", "portioning")),
-         intervention = factor(intervention, levels = c("mask", "wash", "glove", "none")))
+         intervention = factor(intervention, levels = c("none","glove", "wash", "mask", "all")))
 
 # Create the boxplots
 ggplot(data_long, aes(x = step, y = value, fill = intervention)) +
   geom_boxplot(position = position_dodge(0.8)) +
-  labs(title = "Exposure relative to hygiene measures over different steps",
+  labs(title = "Effect of hygiene measures on occupational exposure at different steps",
        # subtitle = "Females (no mask) and Males (with masks)",
-       x = "Steps",
-       y = "log10 CFU") +
+       x = "steps",
+       y = "concentration on lips (log10 CFU)") +
   theme_minimal() +
-  scale_fill_manual(values = c("mask" = "blue", "wash" = "pink", "glove" = "green", "none" = "red"))
+  scale_fill_manual(values = c("none" = "red", "mask" = "blue", "wash" = "pink", "glove" = "yellow", "all" = "green")) +
+  scale_x_discrete(labels = c("post_bleeding" = "post\nbleeding", "post_df" = "post\ndefeathering", "post_ev" = "post\nevisceration"))
 
 # Plot selected
 data_select <- data.frame(

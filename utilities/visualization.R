@@ -34,7 +34,7 @@ plot_bacteria_accumulation <- function(sim_idx, transmission_data, occupational_
 
 # Plot ECDFs of final exposure to workers
 plot_ecdfs <- function(occupational_output) {
-  # Create a new dataframe with log10 values and a 'pathway' column
+  # Create a new dataframe with log10 values and a 'steps' column
   data_long <- data.frame(value = c(
     log10(occupational_output$C_lips.thinning),
     log10(occupational_output$C_lips.clearing),
@@ -45,26 +45,26 @@ plot_ecdfs <- function(occupational_output) {
     log10(occupational_output$C_lips.post_ev),
     log10(occupational_output$C_lips.portioning)
   ),
-  pathway = rep(c("thinning", "clearing", "unloading", "hanging", "post_bleeding", "post_df", "post_ev", "portioning"), each = nrow(occupational_output)))
+  steps = rep(c("thinning", "clearing", "unloading", "hanging", "post bleeding", "post defeathering", "post evisceration", "portioning"), each = nrow(occupational_output)))
   
   # Plot the ECDFs
-  ggplot(data_long, aes(x = value, color = pathway)) +
+  ggplot(data_long, aes(x = value, color = steps)) +
     stat_ecdf(geom = "step") +
     labs(
-      title = "ECDF of different stages exposure dose",
+      title = "ECDFs of occupational exposure at different steps",
       subtitle = paste0("flocks size: ", n_broiler, " with ", length(occupational_output$Runs), " MC runs"),
-      x = "log10(CFU)",
-      y = "ECDF",
-      color = "pathway"
+      x = "concentration on lips (log10 CFU)",
+      y = "cumulative probability",
+      color = "steps"
     ) +
     scale_color_manual(values = c(
       "thinning" = "blue",
       "clearing" = "green",
       "unloading" = "yellow",
       "hanging" = "red",
-      "post_bleeding" = "purple", 
-      "post_df" = "pink", 
-      "post_ev" = "brown",
+      "post bleeding" = "purple", 
+      "post defeathering" = "pink", 
+      "post evisceration" = "brown",
       "portioning" = "orange"
     )) +
     theme_minimal()
@@ -80,19 +80,19 @@ plot_variable <- function(data, plot_all = TRUE, flock = TRUE, variable) {
   
   if(variable == "lips"){
     myprefix <- "C_lips."
-    mytitle <- "Bacteria exposure on a worker's lips over production stages"
-    mylabel <- "log10 CFU"
+    mytitle <- "ESBL E. coli exposure on a worker's lips over different steps"
+    mylabel <- "concentration on lips (log10 CFU)"
   }else if(variable == "hand"){
     myprefix <- "C_hand."
-    mytitle <- "Bacteria exposure on a worker's hands over production stages"
+    mytitle <- "ESBL E. coli exposure on a worker's hands over different steps"
     mylabel <- "log10 CFU/cm2"
   }else if(variable == "surface"){
     myprefix <- "C_cm2."
-    mytitle <- "Bacteria exposure on broiler/carcasses over production stages"
-    mylabel <- "log10 CFU/cm2"
+    mytitle <- "ESBL E. coli exposure on broilers/carcasses over different steps"
+    mylabel <- "surface concentration (log10 CFU/cm2)"
   }else if(variable == "ratio"){
     myprefix <- "broiler_worker."
-    mytitle <- "Broiler processed per worker over production stages"
+    mytitle <- "Broiler processed per worker over different steps"
     mylabel <- "contacts"
   }
   
@@ -117,12 +117,12 @@ plot_variable <- function(data, plot_all = TRUE, flock = TRUE, variable) {
     gg <- ggplot(data = data_long, aes(x = step, y = log10(value), color = color, group = Runs)) +
       labs(title = mytitle,
            subtitle = paste0("flocks size: ", n_broiler, " with ", length(data$Runs), " MC runs"),
-           x = "Stages",
+           x = "steps",
            y = mylabel) +
       theme_minimal() +
       geom_line() +
       geom_point() +
-      scale_color_manual(values = c("red" = "red", "blue" = "blue"), labels = c("red" = paste0("positive (", round(mean(foodborne_output$prev), 2)*100, "%)"), "blue" = paste0("negative (", (1-round(mean(foodborne_output$prev), 2))*100, "%)")), name = "Flock Status")
+      scale_color_manual(values = c("red" = "red", "blue" = "blue"), labels = c("red" = paste0("positive (", round(mean(foodborne_output$prev), 2)*100, "%)"), "blue" = paste0("negative (", (1-round(mean(foodborne_output$prev), 2))*100, "%)")), name = "flock initial status")
     
   } else {
     # Calculate summary statistics for plotting
@@ -156,18 +156,18 @@ plot_variable <- function(data, plot_all = TRUE, flock = TRUE, variable) {
       geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci, fill = color), alpha = 0.3) +  # Confidence bands
       labs(title = mytitle,
            subtitle = paste0("flocks size: ", n_broiler, " with ", length(data$Runs), " MC runs"),
-           x = "Stages",
+           x = "steps",
            y = mylabel) +
-      scale_linetype_manual(values = c("Mean" = "solid", "Median" = "dotted"), name = "Statistic")
+      scale_linetype_manual(values = c("Mean" = "solid", "Median" = "dotted"), name = "statistic")
     
     if (flock) {
       gg <- gg + 
-        scale_color_manual(values = c("red" = "red", "blue" = "blue"), name = "Flock Status",
+        scale_color_manual(values = c("red" = "red", "blue" = "blue"), name = "flock initial status",
                            labels = c("red" = paste0("positive (", round(mean(foodborne_output$prev), 2)*100, "%)"), "blue" = paste0("negative (", (1-round(mean(foodborne_output$prev), 2))*100, "%)"))) +
         scale_fill_manual(values = c("red" = "red", "blue" = "blue"), guide = "none")
     } else {
       gg <- gg + 
-        scale_color_manual(values = c("black" = "black"), name = "Flock Status",
+        scale_color_manual(values = c("black" = "black"), name = "flock initial status",
                            labels = c("black" = "all")) +
         scale_fill_manual(values = c("black" = "black"), guide = "none")
     }
@@ -175,9 +175,11 @@ plot_variable <- function(data, plot_all = TRUE, flock = TRUE, variable) {
     gg <- gg + theme_minimal() +
       theme(legend.title = element_text(size = 12),  # Set legend title
             legend.text = element_text(size = 12)) +
-      guides(linetype = guide_legend(title = "Statistic"),
+      guides(linetype = guide_legend(title = "statistic"),
              color = guide_legend(override.aes = list(linetype = "solid")))  # Ensure color legend shows solid line
   }
+  
+    gg <- gg + scale_x_discrete(labels = c("post_bleeding" = "bleeding", "post_df" = "defeathering", "post_ev" = "evisceration"))
   
   return(gg)
 }
@@ -203,7 +205,7 @@ plot_box <- function(data) {
   gg <- ggplot(data = data_long, aes(x = step, y = value)) +
     labs(title = mytitle,
          subtitle = paste0("flocks size: ", n_broiler, " with ", length(data$Runs), " MC runs"),
-         x = "Stages",
+         x = "steps",
          y = mylabel) +
     theme_minimal() +
     geom_boxplot() 
